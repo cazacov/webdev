@@ -1,3 +1,8 @@
+#ignore files that are downloaded using Bower
+
+js/lib/
+
+
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
 *.iml
@@ -24,6 +29,8 @@
 
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
+
+
 
 ## File-based project format:
 *.ipr
