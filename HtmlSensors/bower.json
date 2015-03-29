@@ -6,6 +6,7 @@
         "bootstrap": null,
         "requirejs": null,
         "sprintf": null,
-        "toastr": null
+        "toastr": null,
+        "three.js": null
     }
 }

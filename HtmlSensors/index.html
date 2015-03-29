@@ -13,6 +13,8 @@
         <div class="row">
             <div class="col-sm-8">
                 <h2>Model</h2>
+                <div class="col-sm-12" id="container3d" style="background: gray; height: 500px; width: 500px">
+                </div>
             </div>
             <div class="col-sm-4">
                 <div class="col-sm-12">
@@ -28,6 +30,63 @@
     <script src="js/lib/toastr/toastr.js"></script>
     <script src="js/lib/requirejs/require.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/lib/three.js/three.js"></script>
+    <script src="js/loaders/colladaloader.js"></script>
     <script src="js/webapp.js"></script>
+
+    <script>
+        var camera, scene, renderer, objects;
+        var arduino;
+
+        var loader = new THREE.ColladaLoader();
+        loader.options.convertUpAxis = true;
+        loader.load( './arduino.dae', function (collada) {
+            arduino = collada.scene;
+            arduino.scale.x = arduino.scale.y = arduino.scale.z = 1;
+            arduino.updateMatrix();
+            init();
+            animate();
+        });
+
+        function init() {
+            var container = document.getElementById("container3d");
+            scene = new THREE.Scene();
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            container.appendChild(renderer.domElement);
+
+            // objects
+            scene.add(arduino);
+
+            // create a point light
+            var pointLight =
+                    new THREE.PointLight(0xFFFFFF);
+
+            // set its position
+            pointLight.position.x = 200;
+            pointLight.position.y = 600;
+            pointLight.position.z = 900;
+
+            // add to the scene
+            scene.add(pointLight);
+
+            camera = new THREE.PerspectiveCamera( 30, 1.0, 0.1, 1000 );
+            camera.position.z = 300;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function render() {
+            if (arduino !== null)
+            {
+                arduino.rotation.x += 0.01;
+                arduino.rotation.y += 0.01;
+            }
+            renderer.render(scene, camera);
+        }
+    </script>
 </body>
 </html>
