@@ -28,7 +28,7 @@ define(function () {
             window.addEventListener('deviceorientation', deviceOrientationHandler, false);
         }
         else {
-            this.debugWriter.compas("Not supported");
+            this.debugWriter.compass("Not supported");
         }
     }
 
@@ -49,19 +49,10 @@ define(function () {
     }
 
     function deviceOrientationHandler(eventData) {
-        // gamma is the left-to-right tilt in degrees, where right is positive
-        var tiltLR = eventData.gamma;
-
-        // beta is the front-to-back tilt in degrees, where front is positive
-        var tiltFB = eventData.beta;
-
-        // alpha is the compass direction the device is facing in degrees
-        var dir = eventData.alpha
-
-        var xyz = "[LR, FB, DIR]";
-        info = xyz.replace("LR", Math.round(tiltLR));
-        info = info.replace("FB", Math.round(tiltFB));
-        info = info.replace("DIR", Math.round(dir));
+        var xyz = "[A, B, G]";
+        info = xyz.replace("A", Math.round(eventData.alpha));
+        info = info.replace("B", Math.round(eventData.beta));
+        info = info.replace("G", Math.round(eventData.gamma));
         that.debugWriter.compas(info);
     }
 

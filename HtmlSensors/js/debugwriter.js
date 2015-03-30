@@ -1,6 +1,3 @@
-/**
- * Created by Victor on 28.03.2015.
- */
 define(function () {
     var me;
 
@@ -20,8 +17,12 @@ define(function () {
             showText('grav.', message);
         },
 
-        compas: function (message) {
+        compass: function (message) {
             showText('mag.', message);
+        },
+
+        show: function (caption, message) {
+            showText(caption, message);
         }
     };
 
@@ -32,7 +33,7 @@ define(function () {
         {
             var row = $('<div class="row"></div>');
             var label = $('<div class="col-sm-3 debug-label"></div>');
-            var element = $('<div class="col-sm-9 debug-value" id="' + caption + '"></div>');
+            element = $('<div class="col-sm-9 debug-value" id="' + caption + '"></div>');
 
             me.targetDiv.append(row);
             row.append(label);

@@ -1,11 +1,14 @@
-sprintf = require(['sprintf']).sprintf;
+var sprintf = require(['sprintf']).sprintf;
 
-require(['debugwriter', 'sensors'], function (DebugWriter, Sensors) {
+require(['debugwriter', 'sensors', 'controllertd'], function (DebugWriter, Sensors, Controller3D) {
 
     $().ready(function () {
         var debugBox = $(document.getElementById('debugBox'));
 
-        var debugwriter = new DebugWriter(debugBox);
-        var sensors = new Sensors(debugwriter, sprintf);
+        var debugWriter = new DebugWriter(debugBox);
+        //var sensors = new Sensors(debugwriter, sprintf);
+
+        var controller = new Controller3D(debugWriter, sprintf);
+        controller.start();
     });
 });
