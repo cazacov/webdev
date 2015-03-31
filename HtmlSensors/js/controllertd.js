@@ -8,7 +8,7 @@ define(function () {
 
     var me;
     var container, camera, scene, renderer, objects, controls;
-    var arduino;
+    var arduino, group;
 
     function Controller3D(debugWriter, sprintf) {
         me = this;
@@ -43,32 +43,47 @@ define(function () {
         container.appendChild(renderer.domElement);
 
         // objects
-        scene.add(arduino);
+        group = new THREE.Object3D();//create an empty container
+        group.add( arduino);//add a mesh with geometry to it
+        scene.add( group );
 
-        /*
-         var geometry = new THREE.BoxGeometry( 20, 20, 20 );
-         var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-         var cube = new THREE.Mesh( geometry, material );
-         cube.position.y = 100;
-         scene.add( cube );
-         */
+        // Mark axes
+        var geometryX = new THREE.BoxGeometry(10, 10, 10 );
+        var materialX = new THREE.MeshBasicMaterial( { color: git0xff0000 } );
+        var cubeX = new THREE.Mesh( geometryX, materialX );
+        cubeX.position.x = 200;
+        group.add( cubeX );
 
-        // create a point light
-        var pointLight =
-            new THREE.PointLight(0xFFFFFF);
-        // set its position
-        pointLight.position.x = 200;
-        pointLight.position.y = 600;
-        pointLight.position.z = 900;
-        // add to the scene
-        scene.add(pointLight);
+        var geometryY = new THREE.BoxGeometry(10, 10, 10 );
+        var materialY = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        var cubeY = new THREE.Mesh( geometryY, materialY );
+        cubeY.position.y = 200;
+        group.add( cubeY );
 
-        var ambientLight = new THREE.AmbientLight( 0x101010 ); // soft white light
-        scene.add(ambientLight);
+        var geometryZ = new THREE.BoxGeometry(10, 10, 10 );
+        var materialZ = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+        var cubeZ = new THREE.Mesh( geometryZ, materialZ );
+        cubeZ.position.z = 200;
+        group.add( cubeZ );
 
+
+        // Lights
+        var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+        directionalLight.position.set( -1, 1, 1 );
+        scene.add( directionalLight );
+
+        var directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.2 );
+        directionalLight2.position.set( 0, -1, 0 );
+        scene.add( directionalLight2 );
+
+        var directionalLight3 = new THREE.DirectionalLight( 0xffffff, 0.3 );
+        directionalLight3.position.set( 1, 1, 0 );
+        scene.add( directionalLight3 );
+
+        // Camera
         camera = new THREE.OrthographicCamera( -250, 250, 250, -250, 1, 1000 );
-        camera.position.z = 300;
 
+        // Browser orientation controls
         controls = new DeviceOrientationController( camera, renderer.domElement );
         controls.connect();
     }
@@ -76,27 +91,20 @@ define(function () {
     function animate() {
         controls.update();
 
-        arduino.position.x = camera.position.x - camera.matrixWorldInverse.elements[12];
-        arduino.position.y = camera.position.y - camera.matrixWorldInverse.elements[13];
-        arduino.position.z = camera.position.z + camera.matrixWorldInverse.elements[14];
+        var vector =   new THREE.Vector3(0, 0, -300);
+        var m = camera.matrixWorld;
+        vector.applyMatrix4(m);
+
+        group.position.x = vector.x;
+        group.position.y = vector.y;
+        group.position.z = vector.z;
 
         requestAnimationFrame(animate);
         render();
     }
 
     function render() {
-
-        var matrixWorldInverse = camera.matrixWorldInverse;
-        var projectionMatrix = camera.projectionMatrix;
-
-        showCameraMatrix(camera);
-
-        /*
-         if (arduino !== null)
-         {
-         arduino.rotation.x += 0.01;
-         arduino.rotation.y += 0.01;
-         }*/
+        //showCameraMatrix(camera);
         renderer.render(scene, camera);
     }
 
