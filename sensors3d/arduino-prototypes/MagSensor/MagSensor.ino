@@ -71,38 +71,73 @@ void setup(void)
 
 void loop(void) 
 {
-  /* Get a new sensor event */ 
-  sensors_event_t event; 
-  mag.getEvent(&event);
- 
-  /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+  double minX = 1000;
+  double maxX = -1000;  
+  double minY = 1000;
+  double maxY = -1000;  
+  double minZ = 1000;
+  double maxZ = -1000;  
+  
+  Serial.println("Calibrating...");
+  long stopTime = millis() + 60000;
+  
+  while (millis() < stopTime)
+  {
+    sensors_event_t event; 
+    mag.getEvent(&event);
+    if (event.magnetic.x < minX)
+    {
+      minX = event.magnetic.x;
+    }
+    if (event.magnetic.y < minY)
+    {
+      minY = event.magnetic.y;
+    }
+    if (event.magnetic.z < minZ)
+    {
+      minZ = event.magnetic.z;
+    }
+    if (event.magnetic.x > maxX)
+    {
+      maxX = event.magnetic.x;
+    }
+    if (event.magnetic.y > maxY)
+    {
+      maxY = event.magnetic.y;
+    }
+    if (event.magnetic.z > maxZ)
+    {
+      maxZ = event.magnetic.z;
+    }
+    delay(10);
+  }
 
-  // Hold the module so that Z is pointing 'up' and you can measure the heading with x&y
-  // Calculate heading when the magnetometer is level, then correct for signs of axis.
-  float heading = atan2(event.magnetic.y, event.magnetic.x);
-  
-  // Once you have your heading, you must then add your 'Declination Angle', which is the 'Error' of the magnetic field in your location.
-  // Find yours here: http://www.magnetic-declination.com/
-  // Mine is: -13* 2' W, which is ~13 Degrees, or (which we need) 0.22 radians
-  // If you cannot find your Declination, comment out these two lines, your compass will be slightly off.
-  float declinationAngle = 0.22;
-  heading += declinationAngle;
-  
-  // Correct for when signs are reversed.
-  if(heading < 0)
-    heading += 2*PI;
+  Serial.print("MinX: "); Serial.print(minX); Serial.print("  ");
+  Serial.print("MinY: "); Serial.print(minY); Serial.print("  ");
+  Serial.print("MinZ: "); Serial.print(minZ); Serial.print("  ");Serial.println("");      
+  Serial.print("MaxX: "); Serial.print(maxX); Serial.print("  ");
+  Serial.print("MaxY: "); Serial.print(maxY); Serial.print("  ");
+  Serial.print("MaxZ: "); Serial.print(maxZ); Serial.print("  ");Serial.println("");      
     
-  // Check for wrap due to addition of declination.
-  if(heading > 2*PI)
-    heading -= 2*PI;
-   
-  // Convert radians to degrees for readability.
-  float headingDegrees = heading * 180/M_PI; 
+  double cX = (maxX + minX) / 2;
+  double cY = (maxY + minY) / 2;  
+  double cZ = (maxZ + minZ) / 2;    
   
-  Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
+  Serial.print("CX: "); Serial.print(cX); Serial.print("  ");
+  Serial.print("CY: "); Serial.print(cY); Serial.print("  ");
+  Serial.print("CZ: "); Serial.print(cZ); Serial.print("  ");Serial.println("");      
+
   
-  delay(500);
+  while (1) 
+  {  
+    /* Get a new sensor event */ 
+    sensors_event_t event; 
+    mag.getEvent(&event);
+
+     /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
+    Serial.print("X: "); Serial.print(event.magnetic.x - cX); Serial.print("  ");
+    Serial.print("Y: "); Serial.print(event.magnetic.y - cY); Serial.print("  ");
+    Serial.print("Z: "); Serial.print(event.magnetic.z - cZ); Serial.print("  ");Serial.println("uT");
+    delay(100);
+  }
 }

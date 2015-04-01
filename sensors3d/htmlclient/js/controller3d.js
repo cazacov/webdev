@@ -32,6 +32,10 @@ define(function () {
                 init();
                 animate();
             });
+        },
+        applyRotationMatrix: function(rotationMatrix)
+        {
+            group.quaternion.setFromRotationMatrix(rotationMatrix);
         }
     };
 

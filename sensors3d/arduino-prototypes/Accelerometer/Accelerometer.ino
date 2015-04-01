@@ -1,9 +1,11 @@
-/* IMU Fusion Board - ADXL345 & IMU3000
-   Example Arduino Sketch to read the Gyro and Accelerometer Data
+/* 
+  Test reading accelerometer values
   
-   Written by www.hobbytronics.co.uk 
-   See the latest version at www.hobbytronics.co.uk/arduino-adxl345-imu3000
-   08-Apr-2011
+  Accelerometer on I2C bus
+  SparkFun IMU Fusion Board - ADXL345 & IMU3000
+  https://www.sparkfun.com/products/10252
+   
+   Based on www.hobbytronics.co.uk/arduino-adxl345-imu3000
 */
 
 #define GYRO 0x68         // gyro I2C address
@@ -53,6 +55,7 @@ void writeTo(int device, byte address, byte val) {
 
 void loop()
 {
+    char buf[40];
     // Read the Gyro X, Y and Z and Accel X, Y and Z all through the gyro
     
     // First set the register start address for X on Gyro  
@@ -82,21 +85,15 @@ void loop()
     accel_y = buffer[7] << 8 | buffer[6];
     accel_x = buffer[9] << 8 | buffer[8];
     accel_z = buffer[11] << 8 | buffer[10];
-
-    // Print out what we have
-    Serial.print(gyro_x);  // echo the number received to screen
-    Serial.print(",");
-    Serial.print(gyro_y);  // echo the number received to screen
-    Serial.print(",");    
-    Serial.print(gyro_z);  // echo the number received to screen 
-    Serial.print(",");     
-    Serial.print(accel_x);  // echo the number received to screen
-    Serial.print(",");
-    Serial.print(accel_y);  // echo the number received to screen
-    Serial.print(",");    
-    Serial.print(accel_z);  // echo the number received to screen    
-
-    Serial.println("");     // prints carriage return
-    delay(400);             // wait for a second   
+    
+   
+    // re-arrange axes
+    int x = -accel_x;
+    int y =  accel_z;
+    int z = -accel_y;
+    
+    sprintf(buf, "%d\t%d\t%d", x,y,z);
+    Serial.println(buf);
+    delay(100);             // wait for a second   
 }
 
