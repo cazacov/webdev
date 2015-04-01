@@ -49,7 +49,7 @@ define(function () {
 
         // Mark axes
         var geometryX = new THREE.BoxGeometry(10, 10, 10 );
-        var materialX = new THREE.MeshBasicMaterial( { color: git0xff0000 } );
+        var materialX = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
         var cubeX = new THREE.Mesh( geometryX, materialX );
         cubeX.position.x = 200;
         group.add( cubeX );
