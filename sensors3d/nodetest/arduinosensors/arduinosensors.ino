@@ -18,22 +18,6 @@ int accel_x;
 int accel_y;
 int accel_z;
 
-void displaySensorDetails(void)
-{
-  sensor_t sensor;
-  mag.getSensor(&sensor);
-  Serial.println("------------------------------------");
-  Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-  Serial.print  ("Driver Ver:   "); Serial.println(sensor.version);
-  Serial.print  ("Unique ID:    "); Serial.println(sensor.sensor_id);
-  Serial.print  ("Max Value:    "); Serial.print(sensor.max_value); Serial.println(" uT");
-  Serial.print  ("Min Value:    "); Serial.print(sensor.min_value); Serial.println(" uT");
-  Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" uT");  
-  Serial.println("------------------------------------");
-  Serial.println("");
-  delay(500);
-}
-
 void setup(void) 
 {
   Serial1.begin(57600);
@@ -47,8 +31,6 @@ void setup(void)
     Serial1.println("Ooops, no HMC5883 detected ... Check your wiring!");
     while(1);
   }
-  /* Display some basic information on this sensor */
-  displaySensorDetails();
   
   // Setup Accelerometer
   // Set Gyro settings
@@ -140,16 +122,16 @@ void loop(void)
     normalize(mx, my, mz);
     normalize(ax, ay, az);    
     
-    int iax = ax;
-    int iay = ay;    
-    int iaz = az;        
-    int imx = mx;
-    int imy = my;    
-    int imz = mz;        
+    int  iax = ax;
+    int  iay = ay;    
+    int  iaz = az;        
+    int  imx = mx;
+    int  imy = my;    
+    int  imz = mz;        
     
     char buf[80];
     
-    sprintf(buf, "A %4d %4d %4d\t M %4d %4d %4d", iax, iay, iaz, imx, imy, imz);
+    sprintf(buf, "%d,%d,%d,%d,%d,%d@", iax, iay, iaz, imx, imy, imz);
     Serial1.println(buf);
 
     delay(50);

@@ -1,0 +1,7 @@
+{
+    "name": "HTML5 sensors",
+    "version": "0.0.1",
+    "dependencies": {
+        "jquery": null
+    }
+}
