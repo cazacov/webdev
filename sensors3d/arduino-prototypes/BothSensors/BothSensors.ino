@@ -149,7 +149,7 @@ void loop(void)
     
     char buf[80];
     
-    sprintf(buf, "A %4d %4d %4d\t M %4d %4d %4d", iax, iay, iaz, imx, imy, imz);
+    sprintf(buf, "%d,%d,%d,%d,%d,%d@", iax, iay, iaz, imx, imy, imz);
     Serial1.println(buf);
 
     delay(50);
