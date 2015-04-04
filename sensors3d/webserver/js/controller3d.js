@@ -7,7 +7,7 @@
 define(function () {
 
     var me;
-    var container, camera, scene, renderer, objects, controls;
+    var container, camera, scene, renderer, controls;
     var arduino, group;
 
     function Controller3D(debugWriter, sprintf) {
@@ -33,9 +33,30 @@ define(function () {
                 animate();
             });
         },
-        applyRotationMatrix: function(rotationMatrix)
+        useSensorData: function(sensorString)
         {
-            group.quaternion.setFromRotationMatrix(rotationMatrix);
+            var partsOfStr = sensorString.split(',')
+            if (partsOfStr.length != 6)
+            {
+                me.debugWriter.show("err", sensorString);
+            }
+            // accelerometer
+            var ax = parseFloat(partsOfStr[0]);
+            var ay = parseFloat(partsOfStr[1]);
+            var az = parseFloat(partsOfStr[2]);
+
+            // magnetometer
+            var mx = parseFloat(partsOfStr[3]);
+            var my = parseFloat(partsOfStr[4]);
+            var mz = parseFloat(partsOfStr[5]);
+
+            // Projection of the UP direction on axes
+            var upVector = new THREE.Vector3(ax, ay, az);
+
+            // Projection of the magnetic field direction on axes
+            var magVector = new THREE.Vector3(mx, my, mz);
+
+            rotateModel(upVector, magVector);
         }
     };
 
@@ -145,5 +166,44 @@ define(function () {
         }
     }
 
+    function rotateModel(yProjection, xProjection)
+    {
+        yProjection.normalize();
+        yProjection.normalize();
+
+        // calculate third (X) vector
+        var zProjection = new THREE.Vector3();
+        zProjection.crossVectors(xProjection, yProjection);
+        zProjection.normalize();
+
+        // make X vector perpendicular to Y, Z
+        xProjection.crossVectors(yProjection, zProjection);
+        xProjection.normalize();
+
+        var rotationMatrix = new THREE.Matrix4();
+        rotationMatrix.elements[0] = xProjection.x;
+        rotationMatrix.elements[4] = xProjection.y;
+        rotationMatrix.elements[8] = xProjection.z;
+        rotationMatrix.elements[1] = yProjection.x;
+        rotationMatrix.elements[5] = yProjection.y;
+        rotationMatrix.elements[9] = yProjection.z;
+        rotationMatrix.elements[2] = zProjection.x;
+        rotationMatrix.elements[6] = zProjection.y;
+        rotationMatrix.elements[10] = zProjection.z;
+
+        var d = rotationMatrix.determinant();
+
+        applyRotationMatrix(rotationMatrix);
+    }
+
+    function applyRotationMatrix(rotationMatrix)
+    {
+        if (group === undefined)
+        {
+            // scene is not loaded yet
+            return;
+        }
+        group.quaternion.setFromRotationMatrix(rotationMatrix);
+    }
     return Controller3D;
 });

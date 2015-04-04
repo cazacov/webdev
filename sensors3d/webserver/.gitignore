@@ -1,7 +1,8 @@
 #ignore files that are downloaded using Bower
-
 js/lib/
 
+#ignore NPM packages
+node_modules/
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 

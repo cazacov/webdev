@@ -1,0 +1,14 @@
+{
+  "name": "demo",
+  "version": "0.0.1",
+  "main": "webapp.js",
+  "scripts": {
+    "start": "node webapp.js"
+  },
+  "author": "Victor Cazacov",
+  "license": "MIT",
+  "dependencies": {
+    "express": "~4.4.3",
+    "node-serial": "~0.1.1"
+  }
+}
