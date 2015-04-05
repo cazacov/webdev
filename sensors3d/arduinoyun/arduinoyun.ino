@@ -1,17 +1,17 @@
 #include <Wire.h>
 
 #include "sensors.h"
-#include "filter.h"
+#include "lowpassfilter.h"
 
 Sensors sensors(-125, -177, -356, 616.0/616, 616.0/527, 616.0/458);
 
 // Median filters
-Filter fax;
-Filter fay;
-Filter faz;
-Filter fmx;
-Filter fmy;
-Filter fmz;
+LowPassFilter fax;
+LowPassFilter fay;
+LowPassFilter faz;
+LowPassFilter fmx;
+LowPassFilter fmy;
+LowPassFilter fmz;
 
 void waitForNodeServer();
 
@@ -39,9 +39,9 @@ void loop(void)
     ax = fax.filter(ax);
     ay = fay.filter(ay);  
     az = faz.filter(az);    
-    mx = fax.filter(mx);
-    my = fay.filter(my);  
-    mz = faz.filter(mz);    
+    mx = fmx.filter(mx);
+    my = fmy.filter(my);  
+    mz = fmz.filter(mz);    
   
     sprintf(buf, "%d,%d,%d,%d,%d,%d@", ax, ay, az, mx, my, mz);
     Serial1.println(buf);
