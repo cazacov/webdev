@@ -8,12 +8,13 @@ var sensorsState = "abc";
 console.log("Starting serial port");
 var SerialPort = require("serialport").SerialPort;
 var serialPort = new SerialPort("/dev/ttyATH0", {
-    baudrate: 57600
+    baudrate: 115200
 });
 
 serialPort.on("open", function () {
     console.log('open');
     serialPort.on('data', function(data) {
+        //console.log(data.length);
         for (var i = 0; i < data.length; i++)
         {
             var d = data[i];
@@ -34,6 +35,7 @@ serialPort.on("open", function () {
             }
         }
     });
+    serialPort.write("nnnnnnnnnn"); // Send start signal to the Arduino
 });
 console.log("Serial port started");
 
@@ -44,6 +46,7 @@ function processInput(buffer, byteCount)
         buffer[j] = 0;
     }
     sensorsState = buffer.toString();
+    console.log(sensorsState);
 }
 
 

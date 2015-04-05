@@ -20,15 +20,25 @@ int accel_z;
 
 void setup(void) 
 {
-  Serial1.begin(57600);
+  Serial1.begin(115200); // Set the baud.
+   // Wait for U-boot to finish startup.  Consume all bytes until we are done.
+  do {
+     while (Serial1.available() > 0) {
+        Serial1.read();
+        }
+    
+    delay(1000);
+  } while (Serial1.available()>0);
+  
+  // logging
+  Serial.begin(57600);
   
   // Setup Magnetometer
-  Serial1.println("HMC5883 Magnetometer Test"); 
   /* Initialise the sensor */
   if(!mag.begin())
   {
     /* There was a problem detecting the HMC5883 ... check your connections */
-    Serial1.println("Ooops, no HMC5883 detected ... Check your wiring!");
+    Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
     while(1);
   }
   
