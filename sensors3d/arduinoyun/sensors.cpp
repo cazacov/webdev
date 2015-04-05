@@ -16,10 +16,17 @@
 #define HMC5883_REGISTER_MAG_OUT_X_H_M 0x03
 
 // Compensate static magnetic field
-// Use sensorscalibration.ino to mesure these values for your baord
-#define CalibrateX  -139
-#define CalibrateY  -188
-#define CalibrateZ  -372
+// Use sensorscalibration.ino to mesure these values for your board
+Sensors::Sensors(int pcx, int pcy, int pcz, float sx, float sy, float sz)
+{
+  cx = pcx;
+  cy = pcy;
+  cz = pcz;
+  scaleX = sx;  
+  scaleY = sy;  
+  scaleZ = sz;    
+}
+
 
 void Sensors::init(void) {
   Wire.begin();  
@@ -126,8 +133,8 @@ void Sensors::readMagnetometer(int &x, int &y, int &z)
   int rawZ = (int16_t)(buffer[3] | ((int16_t)buffer[2] << 8));
 
   // Compensate static field and map axes
-  x = - (rawX - CalibrateX);
-  y = rawZ - CalibrateZ;
-  z = - (rawY - CalibrateY);
+  x = -(rawY - cy) * scaleY;
+  y = (rawZ - cz) * scaleZ;
+  z = -(rawX - cx) * scaleX;
 }
 

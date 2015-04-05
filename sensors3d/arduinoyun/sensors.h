@@ -12,10 +12,17 @@
 class Sensors
 {
  private:
+   int cx;
+   int cy;
+   int cz;
+   float scaleX;
+   float scaleY;
+   float scaleZ;   
   void initAccelerometer(void);
   void initMagnetometer(void);
   void writeTo(int device, byte address, byte val);
  public:
+  Sensors(int pxc = 0, int pcy = 0, int pcz = 0, float sx = 1.0, float sy = 1.0, float sz = 1.0);
   void init(void);
   void readAccelerometer(int &x, int &y, int &z);
   void readMagnetometer(int &x, int &y, int &z);  

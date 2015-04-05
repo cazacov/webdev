@@ -11,11 +11,12 @@ void setup(void)
   sensors.init();
 }
 
+void calculateCompensation(char* label, int minVal, int maxVal);
 
 void loop(void) 
 {
   Serial.println("Calibrating magnetometer...");
-  Serial.println("Please rotate the sensor in all possible directions for 60 seconds");  
+  Serial.println("Please rotate the sensor in all possible directions for 100 seconds");  
   
   int maxX = -30000;
   int minX = +30000;  
@@ -24,7 +25,7 @@ void loop(void)
   int maxZ = -30000;
   int minZ = +30000;  
   
-  for (int j = 60; j >= 0; j--)
+  for (int j = 100; j >= 0; j--)
   {
     Serial.println(j);
     long stopTime = millis() + 1000L;
@@ -47,12 +48,17 @@ void loop(void)
     }
   }
   
-  char buf[80];
-  
-  int cX = ((long)maxX + minX) / 2;
-  int cY = ((long)maxY + minY) / 2;
-  int cZ = ((long)maxZ + minZ) / 2;  
-    
-  sprintf(buf, "%d,%d,%d", cX, cY, cZ);
-  Serial.println(buf);
+  calculateCompensation("X", minX, maxX);  
+  calculateCompensation("Y", minY, maxY);
+  calculateCompensation("Z", minZ, maxZ);  
+}
+
+void calculateCompensation(char* label, int minVal, int maxVal)
+{
+    char buf[80];
+    int mid = ((long)minVal + maxVal) / 2;
+    int scale = maxVal - mid;
+
+    sprintf(buf, "%s:\tc:%d\tmin:%d\tmax:%d\tscale:%d", label, mid, minVal, maxVal, scale);
+    Serial.println(buf);
 }

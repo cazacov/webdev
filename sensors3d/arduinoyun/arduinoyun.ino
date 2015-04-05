@@ -3,7 +3,7 @@
 #include "sensors.h"
 #include "filter.h"
 
-Sensors sensors;
+Sensors sensors(-125, -177, -356, 616.0/616, 616.0/527, 616.0/458);
 
 // Median filters
 Filter fax;
