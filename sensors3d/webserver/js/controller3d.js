@@ -73,6 +73,7 @@ define(function () {
         scene.add( group );
 
         // Mark axes
+        /*
         var geometryX = new THREE.BoxGeometry(10, 10, 10 );
         var materialX = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
         var cubeX = new THREE.Mesh( geometryX, materialX );
@@ -90,7 +91,7 @@ define(function () {
         var cubeZ = new THREE.Mesh( geometryZ, materialZ );
         cubeZ.position.z = 200;
         group.add( cubeZ );
-
+        */
 
         // Lights
         var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
