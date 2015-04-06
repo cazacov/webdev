@@ -3,7 +3,7 @@
 #include "sensors.h"
 #include "lowpassfilter.h"
 
-Sensors sensors(-125, -177, -356, 616.0/616, 616.0/527, 616.0/458);
+Sensors sensors(-125, -177, -356, 6160.0/616, 6160.0/527, 6160.0/458);
 
 // Median filters
 LowPassFilter fax;
@@ -45,7 +45,7 @@ void loop(void)
   
     sprintf(buf, "%d,%d,%d,%d,%d,%d@", ax, ay, az, mx, my, mz);
     Serial1.println(buf);
-    delay(30);
+    delay(40);
   }
 }
 
