@@ -106,7 +106,18 @@ define(function () {
         scene.add( directionalLight3 );
 
         // Camera
-        camera = new THREE.OrthographicCamera( -250, 250, 250, -250, 1, 1000 );
+        var xSize = 250;
+        var ySize = 250;
+        if ( container.offsetWidth > container.offsetHeight)
+        {
+            xSize = ySize * container.offsetWidth / container.offsetHeight;
+        }
+        else
+        {
+            ySize = xSize * container.offsetHeight / container.offsetWidth;
+        }
+
+        camera = new THREE.OrthographicCamera( -xSize, xSize, ySize, -ySize, 1, 1000 );
 
         // Browser orientation controls
         controls = new DeviceOrientationController( camera, renderer.domElement );

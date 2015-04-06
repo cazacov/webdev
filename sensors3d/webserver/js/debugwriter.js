@@ -31,9 +31,9 @@ define(function () {
 
         if (!element.length)
         {
-            var row = $('<div class="row"></div>');
-            var label = $('<div class="col-sm-3 debug-label"></div>');
-            element = $('<div class="col-sm-9 debug-value" id="' + caption + '"></div>');
+            var row = $('<tr></tr>');
+            var label = $('<td></td>');
+            element = $('<td id="' + caption + '"></td>');
 
             me.targetDiv.append(row);
             row.append(label);

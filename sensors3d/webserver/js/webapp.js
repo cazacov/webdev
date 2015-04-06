@@ -18,8 +18,10 @@ require(['debugwriter', 'sensors', 'controller3d'], function (DebugWriter, Senso
     function getSensors() {
         $.get("/sensors", function(data, status) {
             controller.useSensorData(data);
+            debugWriter.show("AJAX ", "OK:");
         })
         .fail(function(err) {
+            debugWriter.show("AJAX ", "Error: " + err);
             console.log(err);
         })
         .always(function() {
