@@ -3,7 +3,8 @@ var inBuf = new Buffer(bufLength);
 var inBufPtr = 0;
 var procBuffer = new Buffer(bufLength);
 var inProcess = false;
-var sensorsState = "abc";
+var sensorsState = "0,1,0,-1,-1,0";
+var receivingData = false;
 
 console.log("Starting serial port");
 var SerialPort = require("serialport").SerialPort;
@@ -46,7 +47,10 @@ function processInput(buffer, byteCount)
         buffer[j] = 0;
     }
     sensorsState = buffer.toString();
-    console.log(sensorsState);
+    if (!receivingData) {
+        console.log(sensorsState);
+    }
+    receivingData = true;
 }
 
 

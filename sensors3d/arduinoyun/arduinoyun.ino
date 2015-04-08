@@ -58,13 +58,16 @@ void waitForNodeServer()
   while (charCount < 10)
   {
     c = Serial1.read();                 // read from UART
-    if (c != -1) {                      // got anything?
-      Serial.write(c);                  // write to USB-CDC
+    // got anything?
+    if (c == -1) {  
+      continue;
+      // write to USB-CDC
     }
+    Serial.write(c);
     if (c == 'n')
     {
       charCount++;
-      Serial.println(charCount);
+      //Serial.println(charCount);
       if (charCount == 10)  // 10 times 'n' is a signal to start sending sensor data to the server
       {
         serverIsListening = true;
