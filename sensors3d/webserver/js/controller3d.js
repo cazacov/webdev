@@ -205,7 +205,13 @@ define(function () {
 
         var d = rotationMatrix.determinant();
 
-        applyRotationMatrix(rotationMatrix);
+        var compensateGeo = new THREE.Matrix4();
+        compensateGeo.makeRotationY(  (180 + 10) * Math.PI / 180.0);
+
+
+        compensateGeo.multiply(rotationMatrix);
+
+        applyRotationMatrix(compensateGeo);
     }
 
     function applyRotationMatrix(rotationMatrix)

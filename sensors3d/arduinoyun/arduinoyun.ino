@@ -31,8 +31,7 @@ void loop(void)
   char buf[80];
   int ax,ay,az, mx,my,mz;
   
-  while (1) 
-  {  
+
     sensors.readAccelerometer(ax, ay, az);
     sensors.readMagnetometer(mx, my, mz);  
   
@@ -46,7 +45,6 @@ void loop(void)
     sprintf(buf, "%d,%d,%d,%d,%d,%d@", ax, ay, az, mx, my, mz);
     Serial1.println(buf);
     delay(40);
-  }
 }
 
 void waitForNodeServer()
@@ -70,7 +68,7 @@ void waitForNodeServer()
       if (charCount == 10)  // 10 times 'n' is a signal to start sending sensor data to the server
       {
         serverIsListening = true;
-        digitalWrite(13, HIGH);        
+
         Serial.println("Got start signal from the server");
         delay(100);
 
